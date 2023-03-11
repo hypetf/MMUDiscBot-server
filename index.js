@@ -1,16 +1,20 @@
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
-const bodyParser = require('body-parser')
 const { PORT, SESSION_SECRET } = process.env;
 const serverPort = PORT || 5000;
 const routes = require('./routes');
-
 const app = express();
-app.use(bodyParser.urlencoded({ extended: false }))
 
-// parse application/json
-app.use(bodyParser.json())
+// app.use(bodyParser.json({
+//     limit: '50mb'
+// }));
+
+// app.use(bodyParser.urlencoded({
+//     limit: '50mb',
+//     parameterLimit: 100000,
+//     extended: true 
+// }));
 
 app.use(
     session({

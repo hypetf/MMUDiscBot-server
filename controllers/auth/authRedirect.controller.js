@@ -10,7 +10,8 @@ const {
 const {
     fetchDiscordUserDetails,
     isGuildMember,
-    oauth2PayloadRequest
+    oauth2PayloadRequest,
+    revokeAccessTokenPayload
 } = require('../../services/index');
 
 async function authRedirectController(req, res) {
@@ -27,7 +28,6 @@ async function authRedirectController(req, res) {
             const response = await oauth2PayloadRequest(formData);
             const { access_token, refresh_token } = response.data;
             const DiscordUser = await fetchDiscordUserDetails(access_token);
-            // const isMember = await isGuildMember(access_token);
             let DiscordAvatar;
             if(DiscordUser.avatar === null)
                 DiscordAvatar = "https://cdn.discordapp.com/attachments/1075493204306165992/1082895894246084628/discord-avatar-512-BK8XE.png";
@@ -41,10 +41,9 @@ async function authRedirectController(req, res) {
                 username: DiscordUser.username,
                 discriminator: DiscordUser.discriminator,
                 verified: DiscordUser.verified,
-                avatar: DiscordAvatar
-                // enc_t: encrypted_accessToken.substring(4,20)
+                avatar: DiscordAvatar,
+                _access_token: access_token, // this is for testing purposes only, bad practice for deployment
             };
-
             res.redirect(SUCCESS_REDIRECT_URL);
         }
         catch(err) {
@@ -54,6 +53,7 @@ async function authRedirectController(req, res) {
 }
 
 function getAuthenticatedUser(req, res) {
+    // check if user is in a server with the bot
     if(!req.session.userData)
         res.sendStatus(401);
     else {
@@ -61,15 +61,29 @@ function getAuthenticatedUser(req, res) {
     }
 }
 
-function logout(req, res) {
-    req.session.destroy();
-    req.session = null;
-    res.clearCookie("connect.sid");
-    res.sendStatus(200);
+async function revokeAT(req, res) {
+    if(req.session.userData) {
+        console.log(DISCORD_CLIENT_ID)
+        let a = await revokeAccessTokenPayload(DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET, req.session.userData._access_token);
+        res.sendStatus(200);
+    }
+    else
+        res.sendStatus(401);
+}
+
+async function logout(req, res) {
+    if(req.session.userData) {
+        req.session.destroy();
+        res.clearCookie("connect.sid");
+        res.sendStatus(200);
+    }
+    else
+        res.sendStatus(200);
 }
 
 module.exports = {
     authRedirectController,
     logout,
-    getAuthenticatedUser
+    getAuthenticatedUser,
+    revokeAT
 }

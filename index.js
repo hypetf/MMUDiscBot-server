@@ -1,20 +1,15 @@
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
-const { PORT, SESSION_SECRET } = process.env;
+const cors = require('cors');
+const { PORT, SESSION_SECRET, CLIENT_URL } = process.env;
 const serverPort = PORT || 5000;
 const routes = require('./routes');
 const app = express();
 
-// app.use(bodyParser.json({
-//     limit: '50mb'
-// }));
-
-// app.use(bodyParser.urlencoded({
-//     limit: '50mb',
-//     parameterLimit: 100000,
-//     extended: true 
-// }));
+app.use(cors({
+    origin: CLIENT_URL
+}))
 
 app.use(
     session({
@@ -24,7 +19,6 @@ app.use(
         saveUninitialized: false,
         cookie: {
             maxAge: 3600000 * 24
-            // maxAge: 5000
         }
     })
 );

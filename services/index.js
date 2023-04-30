@@ -6,7 +6,7 @@ const {
 const fetchDiscordUserDetails = async(access_token) => {
     try {
         const response = await axios.get(
-            'https://discord.com/api/v8/users/@me',
+            'https://discord.com/api/v10/users/@me',
             {
                 headers: {
                     Authorization: `Bearer ${access_token}`
@@ -23,7 +23,7 @@ const fetchDiscordUserDetails = async(access_token) => {
 const isGuildMember = async(access_token) => {
     try {
         const response = await axios.get(
-            'https://discord.com/api/v8/users/@me/guilds',
+            'https://discord.com/api/v10/users/@me/connections',
             {
                 headers: {
                     Authorization: `Bearer ${access_token}`
@@ -35,8 +35,10 @@ const isGuildMember = async(access_token) => {
         let res = arr.find(g => g.id === GUILD_ID);
         if(!res)
             return false;
-        else
+        else {
+            console.log(res);
             return true;
+        }
     } catch (error) {
         console.log(error);
         return error;
@@ -45,7 +47,7 @@ const isGuildMember = async(access_token) => {
 
 const oauth2PayloadRequest = async(formData) => {
     try {
-        const j = await axios.post('https://discord.com/api/v8/oauth2/token',
+        const j = await axios.post('https://discord.com/api/v10/oauth2/token',
             formData.toString(),
             {
                 headers: {
@@ -60,8 +62,34 @@ const oauth2PayloadRequest = async(formData) => {
     }
 }
 
+const revokeAccessTokenPayload = async(clientID, clientSecret, accessToken) => {
+    try {
+        const j = await axios.post(
+            'https://discord.com/api/v10/oauth2/token/revoke',
+            {
+                data: {
+                    client_id: clientID,
+                    client_secret: clientSecret,
+                    token: accessToken
+                }
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                }
+            }
+        )
+        return j;
+    }
+    catch(err) {
+        console.log(err);
+        return err;
+    }
+}
+
 module.exports = {
     fetchDiscordUserDetails,
     isGuildMember,
-    oauth2PayloadRequest
+    oauth2PayloadRequest,
+    revokeAccessTokenPayload
 }

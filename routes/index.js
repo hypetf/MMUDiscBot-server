@@ -4,6 +4,6 @@ const authRoutes = require('./auth/index.route');
 const uploadRoutes = require('./upload/index.route');
 
 router.use('/auth', authRoutes);
-router.use('/upload', uploadRoutes);
+router.use('/audios', uploadRoutes);
 
 module.exports = router;

@@ -38,7 +38,17 @@ const upload = multer({
     }
 }).single('newAudio');
 
-router.post('/audio', async(req, res) => {
+const postUpload = (req, res, next) => {
+    let a = req.session.userData;
+    console.log(a);
+    next();
+}
+
+router.post('/upload', postUpload, async(req, res) => {
+    // check if user is in server
+    // check if user in a voice channel
+    // if bot is already in a voice channel, check if its the same one as the user
+
     await fs.ensureDir(`${process.cwd()+"/audios"}`)
     .then(() => {
         upload(req, res, function(err) {

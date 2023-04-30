@@ -34,7 +34,7 @@ This project is developed on NodeJS v16.14.2.<br/>
 ```sh
 DISCORD_CLIENT_ID=(from discord dev portal)
 DISCORD_CLIENT_SECRET=(from discord dev portal)
-DISCORD_REDIRECT_URL=http://localhost:5000/api/auth/redirect  _(add to discord dev portal)_
+DISCORD_REDIRECT_URL=http://localhost:5000/api/auth/redirect  (add to discord dev portal)
 SUCCESS_REDIRECT_URL=http://localhost:5173/home
 GUILD_ID=(any)
 

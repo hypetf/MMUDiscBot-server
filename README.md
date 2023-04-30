@@ -5,7 +5,7 @@
 ### Description
 
 This is the server of a website which allows to upload an
-audio file and send it to a Discord Bot through a custom API and play it in a Discord Channel.
+audio file and send it to a Discord Bot through a REST API and play it in a Discord Voice Channel.
 
 ### Prerequisites
 
@@ -34,7 +34,7 @@ This project is developed on NodeJS v16.14.2.<br/>
 ```sh
 DISCORD_CLIENT_ID=(from discord dev portal)
 DISCORD_CLIENT_SECRET=(from discord dev portal)
-DISCORD_REDIRECT_URL=http://localhost:5000/api/auth/redirect | (add to discord dev portal)
+DISCORD_REDIRECT_URL=http://localhost:5000/api/auth/redirect  _(add to discord dev portal)_
 SUCCESS_REDIRECT_URL=http://localhost:5173/home
 GUILD_ID=(any)
 
@@ -43,8 +43,39 @@ SESSION_SECRET=(generate random secret key)
 PORT=5000
 ```
 
-Client should be live on:
+Server should be live on:
 
 ```sh
 http://localhost:5000/
 ```
+
+# Features and requirements
+
+## Client
+
+-   [x] Setup all routes and protected routes
+-   [x] Create all pages UI
+-   [x] Communicate with server to login user
+-   [x] Allow to logout
+-   [ ] Allow to revoke access token
+-   [x] Implement notifications
+-   [x] Create interface for uploading files
+-   [x] Display list of uploaded files
+-   [x] Use state manager **(zustand)**
+-   [ ] Make UI responsive
+
+## Server
+
+-   [x] Use Discord API as login method, revoke access token, etc...
+-   [x] Handle sessions and cors
+-   [x] Implement logout and clear session
+-   [x] Handle Upload `POST` route to handle uploads from client
+-   [ ] Verify if user is in voice channel and guild before saving and playing file
+-   [ ] Clear space after song is queued
+
+## Bot
+
+-   [x] Play music in a voice channel
+-   [x] Implement queue and functionalities like: pause, skip, resume, stop
+-   [x] Implement record functionality and implement Speech-To-Text
+-   [ ] Use transcribed text to use functionalities already implemented

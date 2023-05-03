@@ -36,7 +36,6 @@ const isGuildMember = async(access_token) => {
         if(!res)
             return false;
         else {
-            console.log(res);
             return true;
         }
     } catch (error) {

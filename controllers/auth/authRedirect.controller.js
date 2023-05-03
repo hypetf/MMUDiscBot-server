@@ -63,8 +63,7 @@ function getAuthenticatedUser(req, res) {
 
 async function revokeAT(req, res) {
     if(req.session.userData) {
-        console.log(DISCORD_CLIENT_ID)
-        let a = await revokeAccessTokenPayload(DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET, req.session.userData._access_token);
+        // let a = await revokeAccessTokenPayload(DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET, req.session.userData._access_token);
         res.sendStatus(200);
     }
     else
